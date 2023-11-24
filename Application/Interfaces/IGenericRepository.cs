@@ -12,5 +12,7 @@ namespace Application.Interfaces
         Task Delete(T entity);
         Task<IReadOnlyList<T>> GetPagedReponse(int PageNumber, int PageSize, Func<IQueryable<T>, IIncludableQueryable<T, object>> expressions = null);
         Task<int> GetCount();
+        Task RemoveRange(List<T> entityRange);
+        Task<List<T>> AddRange(List<T> entityRange);
     }
 }

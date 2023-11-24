@@ -41,6 +41,21 @@ namespace Infrastructure.Repository
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task RemoveRange(List<T> entityRange)
+        {
+            _dbContext.Set<T>().RemoveRange(entityRange);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<T>> AddRange(List<T> entityRange)
+        {
+            await _dbContext.Set<T>().AddRangeAsync(entityRange);
+            await _dbContext.SaveChangesAsync();
+            return entityRange;
+        }
+
+
+
         public async Task Delete(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;

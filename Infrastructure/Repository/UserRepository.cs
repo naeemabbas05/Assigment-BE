@@ -44,12 +44,22 @@ namespace Infrastructure.Repository
         public async Task<Response<int>> UpdateUser(User user)
         {
             var userRequest = await _userRepository.GetById(user.Id);
-        
+            var skillsets = _userSkillSets.GetAll().Result.Where(x => x.UserId == user.Id).ToList();
             if (userRequest == null)
             {
                 throw new ApiException($"user Not Found.");
             }
+            if (skillsets.Any())
+            {
+               await _userSkillSets.RemoveRange(skillsets);
+            }
 
+            if (user.UserSkillSets.Any())
+            {
+                user.UserSkillSets.ForEach(x => x.UserId = user.Id);
+                await _userSkillSets.AddRange(user.UserSkillSets);
+            }
+       
             await _userRepository.Update(user);
             return new Response<int>(user.Id);
 
